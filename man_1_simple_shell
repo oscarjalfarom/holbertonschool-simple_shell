@@ -1,0 +1,23 @@
+.TH man simple_shell "Agosto 19, 2023"  "version 1.0"
+
+
+.SH NAME
+.B Simple Shell (hsh)
+ - command interpreter (shell)
+
+
+.SH SYNOPSIS
+.PP
+.B ./hsh
+
+
+.PP
+.B
+.SH DESCRIPTION
+This program simulates a command interpreter based in Unix and GNU/LINUX with its basic commands.
+The Simple Shell is a command line interpreter that reads lines from the terminan \ , and executes them, and generally executes other commands.
+It also has features to aid interactive use and has the advantage that the interpretative language is common to both interactive.
+
+.SH AUTHOR(S)
+
+Ishay Junnco - Oscar J Alfaro M.
