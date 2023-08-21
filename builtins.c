@@ -22,3 +22,9 @@ int builtin(char *user_input)
 	} else
 		return (0);
 }
+
+void interruptHandler(int signal)
+{
+	(void) signal;
+	write(STDIN_FILENO, "\n $ ", 4);
+}

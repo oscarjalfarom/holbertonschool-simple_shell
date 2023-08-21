@@ -3,41 +3,41 @@
 int main(void)
 {
     char *user_input[1024];
-    char *token, *line = NULL;
-    size_t i;
+    char *token, *line = NULL, *full_path = NULL;
+    pid_t child_pid;
+    size_t i, line_buffer_size;
     int status = 0;
 
     while (1)
     {
         if (isatty(STDIN_FILENO))
             printf(" $ ");
-        
-        if (getline(&line, &i, stdin) == EOF)
-            break;
-        
+        fflush(stdin);
+        signal(SIGINT, interruptHandler);
+        if (getline(&line, &line_buffer_size, stdin) == EOF)
+            break;     
         if (*line == '\n' || *line == '\t')
             continue;
-        
         token = strtok(line, " \t\n");
-        if (token == NULL)
+        for (i = 0; i < 1024 && token != NULL; i++)
+            user_input[i] = token, token = strtok(NULL, " \t\n");
+        user_input[i] = NULL;
+        if (user_input[0] == NULL)
             continue;
-
-        if (builtin(token) == 0)
+        full_path = pathfinder(user_input[0]);
+        if (builtin(user_input[0]) == 0)
         {
-            pid_t _pid = fork();
-            if (_pid == 0)
+            child_pid = fork();
+            if (child_pid == 0)
             {
-                execve(token, user_input, environ);
-                perror("./shell");
-                free(line);
-                exit(EXIT_FAILURE);
-            }
-            if (_pid > 0)
-                wait(&status);
+                if (execve(full_path, user_input, environ))
+                {
+                    perror("execve"),free(line), exit(EXIT_FAILURE);
+                }
+            }   if (child_pid > 0)
+                    wait(&status), free(line);
         }
-        line = NULL, token = NULL;
+        line = NULL, token = NULL, user_input[0] = NULL;
     }
-    
-    free(line);
-    exit(status);
+    free(line), free(full_path), exit(status); 
 }
