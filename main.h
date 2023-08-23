@@ -1,22 +1,28 @@
-#ifndef _MAIN_H
-#define _MAIN_H
+#ifndef MAIN_H
+#define MAIN_H
 
-#include <unistd.h>
+/*LIBRARIES*/
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 
+/*PROTOTYPES*/
+int _strcmp(char *s1, char *s2);
+char *_strcpy(char *dest, char *src);
+char *search_path(char *command);
+char **_split(char *str, char *sep);
+char *_strcat(char *dest, char *src);
+int _strlen(char *s);
+char *_getenv(char *env_var);
+void *_calloc(unsigned int nmemb, unsigned int size);
+void _env(void);
+int execute(char **args);
+int empty_line(char *buff);
+
+/* GLOBAL VAR*/
 extern char **environ;
-int builtin(char *user_input);
-void interruptHandler(int signal);
-char compare_strings(char *string1, char *string2, int max_length);
-int string_length(char *string);
-char *string_concat(char *string1, char *string2);
-int display_environment_var(void);
-char *_getEnvironmentValue(const char *name);
-char *pathfinder(char *user_imput);
 
 #endif
