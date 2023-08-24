@@ -55,19 +55,26 @@ char *pathfinder(char *command)
 int execComand(char *full_path, char **comand)
 {
 	pid_t child_pid;
-	int status = 0;
+	int status;
 
 	if (builtin(comand[0]) == 0)
 	{
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			if (execve(full_path, comand, environ))
-				perror("Error: "), exit(EXIT_FAILURE);
+		        execve(full_path, comand, environ);
+			perror("Error: "), exit(EXIT_FAILURE);
 		}
-		if (child_pid > 0)
+		else if (child_pid > 0)
+		{
 			wait(&status);
-		return WEXITSTATUS(status);  
+		        return WEXITSTATUS(status);
+		}
+		else
+		{
+		        perror("Error al crear el proceso hijo");
+		        return -1;
+		}
 	}
 	return -1;
 }
