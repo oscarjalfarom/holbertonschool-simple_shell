@@ -8,19 +8,19 @@
 
 int builtin(char *comand)
 {
+        int is_builtin = 0;
+	
 	if (strcmp(comand, "exit") == 0)
 	{
-		free(comand);
 		exit(EXIT_SUCCESS);
-		return (1);
+		is_builtin = 1;
 	}
 	else if (strcmp(comand, "env") == 0)
 	{
 		display_environment_var();
-		free(comand);
-		return (1);
-	} else
-		return (0);
+		is_builtin = 1;
+	}
+		return is_builtin;
 }
 
 /**

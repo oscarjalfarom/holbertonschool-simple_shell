@@ -32,14 +32,19 @@ int main(void)
 			}
 			comand = _malloc(num_tokens);
 			comand = getCommandArray(line, comand);
-			full_path = pathfinder(comand[0]);
-			execComand(full_path, comand);
-			line = NULL, comand = NULL;
+			if (comand != NULL)
+			{
+			    full_path = pathfinder(comand[0]);
+			    execComand(full_path, comand);
+			    free(comand);
+			}
+			free(full_path);
+			free(line_copy);
 		}
 		else
 		{
-			free(line), free(comand), free(full_path), free(line_copy);
-			return (0);
+		     free(line);
+		     return (0);
 		}
 	}
 }

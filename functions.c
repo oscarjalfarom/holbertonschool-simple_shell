@@ -8,13 +8,11 @@
 
 void *_malloc(unsigned int size)
 {
-	char *memorySpace;
-
-	memorySpace = malloc(sizeof(char) * size);
+	char *memorySpace = malloc(size + 1);
 	if (memorySpace == NULL)
 	{
 		perror("Memory allocation error");
-		return (0);
+		exit(EXIT_FAILURE);
 	}
 	return (memorySpace);
 }
@@ -41,6 +39,12 @@ char *pathfinder(char *command)
 		{
 			directory_length = strlen(path_token);
 			file_path = malloc(command_length + directory_length + 2);
+			if (file_path == NULL)
+			{
+			  perror("Memory allocation error");
+			  free(path_copy);
+			  return NULL;
+			}
 			strcpy(file_path, path_token);
 			strcat(file_path, "/");
 			strcat(file_path, command);
@@ -79,13 +83,22 @@ void execComand(char *full_path, char **comand)
 	if (builtin(comand[0]) == 0)
 	{
 		child_pid = fork();
-		if (child_pid == 0)
+		if (child_pid == -1)
 		{
-			if (execve(full_path, comand, environ))
-				perror("Error: "), exit(EXIT_FAILURE);
+		    perror("Error creating child process");
+		    return;
 		}
-		if (child_pid > 0)
+		else if (child_pid == 0)
+		{
+		  signal(SIGINT, SIG_DFL);
+		  execve(full_path, comand, environ);
+		  perror("Error: ");
+		  exit(EXIT_FAILURE);
+		}
+		else
+		{
 			wait(&status);
+		}     
 	}
 }
 
@@ -119,12 +132,12 @@ char **getCommandArray(char *line, char **command)
 	char *line_copy, *token;
 	int i;
 
-	line_copy = _malloc(strlen(line));
+	line_copy = _malloc(strlen(line) + 1);
 	strcpy(line_copy, line);
 	token = strtok(line_copy, " \t\n");
 	for (i = 0; token != NULL; i++)
 	{
-		command[i] = _malloc(strlen(token));
+		command[i] = _malloc(strlen(token) + 1);
 		strcpy(command[i], token);
 		token = strtok(NULL, " \t\n");
 	}
