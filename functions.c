@@ -52,31 +52,22 @@ char *pathfinder(char *command)
  * Return: not return
  */
 
-int execComand(char *full_path, char **comand)
+void execComand(char *full_path, char **comand)
 {
 	pid_t child_pid;
-	int status;
+	int status = 0;
 
 	if (builtin(comand[0]) == 0)
 	{
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-		        execve(full_path, comand, environ);
-			perror("Error: "), exit(EXIT_FAILURE);
+			if (execve(full_path, comand, environ))
+				perror("Error: "), exit(EXIT_FAILURE);
 		}
-		else if (child_pid > 0)
-		{
-			waitpid(child_pid, &status, 0);
-		        return WEXITSTATUS(status);
-		}
-		else
-		{
-		        perror("Error al crear el proceso hijo");
-		        return -1;
-		}
+		if (child_pid > 0)
+			wait(&status);
 	}
-	return -1;
 }
 
 /**
@@ -97,30 +88,31 @@ void display_environment_var(void)
 	}
 }
 
+/**
+ * trim - verify the posible space in the input
+ * @str: line input
+ */
+
 void trim(char *str)
 {
-    int start = 0, end = strlen(str) - 1;
-    int i, j;
-    
-    /* Buscar el primer índice no espaciado */
-    while (str[start] != '\0' && (str[start] == ' ' || str[start] == '\t'))
-    {
-        start++;
-    }
+	int start = 0, end = strlen(str) - 1;
+	int i, j;
 
-    /* Buscar el último índice no espaciado */
-    while (end >= 0 && (str[end] == ' ' || str[end] == '\t' || str[end] == '\n'))
-    {
-        end--;
-    }
-    /* Copiar los caracteres no espaciados al principio de la cadena */
-    for (i = start, j = 0; i <= end; i++, j++)
-    {
-        str[j] = str[i];
-    }
-
-    /* Agregar el carácter nulo al final*/
-    str[j] = '\0';
+	/* Buscar el primer índice no espaciado */
+	while (str[start] != '\0' && (str[start] == ' ' || str[start] == '\t'))
+	{
+		start++;
+	}
+	/* Buscar el último índice no espaciado */
+	while (end >= 0 && (str[end] == ' ' || str[end] == '\t' || str[end] == '\n'))
+	{
+		end--;
+	}
+	/* Copiar los caracteres no espaciados al principio de la cadena */
+	for (i = start, j = 0; i <= end; i++, j++)
+	{
+		str[j] = str[i];
+	}
+	/* Agregar el carácter nulo al final*/
+	str[j] = '\0';
 }
-
-

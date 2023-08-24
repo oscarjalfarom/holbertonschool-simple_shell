@@ -19,8 +19,8 @@ int main(void)
 		signal(SIGINT, interruptHandler);
 		if (getline(&line, &buffer_size, stdin) != EOF)
 		{
-		        trim(line);
-			if (*line == '\n' || *line == '\t' || *line == '\0')
+			trim(line);
+			if (*line == '\n' || *line == '\t')
 				continue;
 			token = strtok(line, " \t\n");
 			for (i = 0; i < 1024 && token != NULL; i++)
@@ -44,8 +44,7 @@ int main(void)
 	}
 	free(line);
 	for (i = 0; comand[i] != NULL; i++)
-	{
-	        free(comand[i]);
-        }
+		free(comand[i]);
+	free(full_path);
 	return (0);
 }
