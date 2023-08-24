@@ -29,10 +29,7 @@ int main(void)
 			}
 			comand[i] = NULL;
 			if (comand[0] == NULL)
-			{
-			        free(line);
 				continue;
-			}
 			full_path = pathfinder(comand[0]);
 			execComand(full_path, comand);
 			line = NULL;
@@ -41,9 +38,9 @@ int main(void)
 		else
 		{
 			free(line);
-			break;
+			return (0);
 		}
 	}
-	free(line);
+	free(line), free(comand), free(full_path);
 	return (0);
 }

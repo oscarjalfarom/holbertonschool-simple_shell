@@ -1,25 +1,6 @@
 #include "main.h"
 
 /**
- * _malloc - allocates memory for an array, using malloc.
- * @size: Size of each element
- * Return: pointer to the allocated memory, or 0 in fail
- */
-
-void *_malloc(unsigned int size)
-{
-	char *memorySpace;
-
-	memorySpace = malloc(sizeof(char) * size);
-	if (memorySpace == NULL)
-	{
-		perror("Memory allocation error");
-		return (0);
-	}
-	return (memorySpace);
-}
-
-/**
  * pathfinder - get the path of the comand
  * @command: firts command
  * Return: the path command
@@ -56,11 +37,12 @@ char *pathfinder(char *command)
 				path_token = strtok(NULL, ":");
 			}
 		}
+		free(path_copy);
+		if (stat(command, &buffer) == 0)
+			return (command);
+		return (NULL);
 	}
-	free(path_copy);
-	if (stat(command, &buffer) == 0)
-	        return (strdup(command));
-        return (NULL);
+	return (NULL);
 }
 
 /**
@@ -80,9 +62,8 @@ void execComand(char *full_path, char **comand)
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-		        execve(full_path, comand, environ);
-		        perror("Error: ");
-		        exit(EXIT_FAILURE);
+			if (execve(full_path, comand, environ))
+				perror("Error: "), exit(EXIT_FAILURE);
 		}
 		if (child_pid > 0)
 			wait(&status);
@@ -98,37 +79,11 @@ void display_environment_var(void)
 {
 	char **envvar = environ;
 	int i = 0;
-	
+
 	while (envvar[i])
 	{
 		write(1, envvar[i], strlen(envvar[i]));
 		write(1, "\n", 1);
 		++i;
 	}
-}
-
-/**
- * getCommandArray - get the array of strings
- * @line: pointer to character input user
- * @command: array empty of strings
- * Return: the array of strings
- */
-
-char **getCommandArray(char *line, char **command)
-{
-	char *line_copy, *token;
-	int i;
-
-	line_copy = _malloc(strlen(line));
-	strcpy(line_copy, line);
-	token = strtok(line_copy, " \t\n");
-	for (i = 0; token != NULL; i++)
-	{
-		command[i] = _malloc(strlen(token));
-		strcpy(command[i], token);
-		token = strtok(NULL, " \t\n");
-	}
-	command[i] = NULL;
-	free(line_copy);
-	return (command);
 }
