@@ -17,5 +17,6 @@ char *pathfinder(char *command);
 void interruptHandler(int signal);
 int builtin(char *user_input);
 void execComand(char *full_path, char **comand);
+void removeExtraSpaces(char *str);
 
 #endif

@@ -116,3 +116,31 @@ void trim(char *str)
 	/* Agregar el carácter nulo al final*/
 	str[j] = '\0';
 }
+
+#include <ctype.h>
+
+void removeExtraSpaces(char *str)
+{
+    int i = 0, j = 0;
+    int space_seen = 0;
+
+    while (str[i])
+    {
+        if (!isspace((unsigned char)str[i]))
+        {
+            space_seen = 0;
+            str[j++] = str[i];
+        }
+        else if (!space_seen)
+        {
+            space_seen = 1;
+            str[j++] = ' ';
+        }
+        i++;
+    }
+
+    if (j > 0 && isspace((unsigned char)str[j - 1]))
+        str[j - 1] = '\0';
+    else
+        str[j] = '\0';
+}
