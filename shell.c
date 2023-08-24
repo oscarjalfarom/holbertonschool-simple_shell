@@ -32,10 +32,7 @@ int main(void)
 			if (comand[0] == NULL)
 				continue;
 			if (strcmp(line, "exit\n") == 0)
-                        {
-			        free(line);
 				exit(0);
-			}
 			
 			full_path = pathfinder(comand[0]);
 			execComand(full_path, comand);
