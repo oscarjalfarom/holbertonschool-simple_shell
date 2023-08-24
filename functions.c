@@ -67,7 +67,7 @@ int execComand(char *full_path, char **comand)
 		}
 		else if (child_pid > 0)
 		{
-			wait(&status);
+			waitpid(child_pid, &status, 0);
 		        return WEXITSTATUS(status);
 		}
 		else
