@@ -98,7 +98,7 @@ void display_environment_var(void)
 {
 	char **envvar = environ;
 	int i = 0;
-	
+
 	while (envvar[i])
 	{
 		write(1, envvar[i], strlen(envvar[i]));
