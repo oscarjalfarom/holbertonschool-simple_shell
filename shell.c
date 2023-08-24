@@ -11,12 +11,12 @@ int main(void)
 	size_t buffer_size = 0;
 	int i;
 
+	signal(SIGINT, interruptHandler);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 			printf(" $ ");
-		fflush(stdin);
-		signal(SIGINT, interruptHandler);
+		fflush(stdout);
 		if (getline(&line, &buffer_size, stdin) != EOF)
 		{
 			trim(line);
