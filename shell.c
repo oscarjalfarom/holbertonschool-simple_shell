@@ -31,13 +31,10 @@ int main(void)
 			comand[i] = NULL;
 			if (comand[0] == NULL)
 				continue;
-			if (strcmp(comand[0], "exit") == 0)
+			if (strcmp(line, "exit\n") == 0)
                         {
 			        free(line);
-				for (i = 0; comand[i] != NULL; i++)
-				         free(comand[i]);
-				free(full_path);
-				exit(EXIT_SUCCESS);
+				exit(0);
 			}
 			
 			full_path = pathfinder(comand[0]);
