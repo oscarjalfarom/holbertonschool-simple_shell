@@ -52,7 +52,7 @@ char *pathfinder(char *command)
  * Return: not return
  */
 
-void execComand(char *full_path, char **comand)
+int execComand(char *full_path, char **comand)
 {
 	pid_t child_pid;
 	int status = 0;
@@ -67,7 +67,9 @@ void execComand(char *full_path, char **comand)
 		}
 		if (child_pid > 0)
 			wait(&status);
+		return WEXITSTATUS(status);  
 	}
+	return -1;
 }
 
 /**
