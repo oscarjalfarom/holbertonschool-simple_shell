@@ -62,8 +62,8 @@ void execComand(char *full_path, char **comand)
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			if (execve(full_path, comand, environ))
-				perror("Error: "), exit(EXIT_FAILURE);
+			if (execve(full_path, comand, environ) == -1)
+				perror("Error executing command"), exit(EXIT_FAILURE);
 		}
 		if (child_pid > 0)
 			wait(&status);

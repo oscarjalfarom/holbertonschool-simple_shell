@@ -11,12 +11,12 @@ int main(void)
 	size_t buffer_size = 0;
 	int i;
 
-	signal(SIGINT, interruptHandler);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 			printf(" $ ");
-		fflush(stdout);
+		fflush(stdin);
+		signal(SIGINT, interruptHandler);
 		if (getline(&line, &buffer_size, stdin) != EOF)
 		{
 			trim(line);
@@ -31,9 +31,6 @@ int main(void)
 			comand[i] = NULL;
 			if (comand[0] == NULL)
 				continue;
-			if (strcmp(line, "exit\n") == 0)
-				exit(0);
-			
 			full_path = pathfinder(comand[0]);
 			execComand(full_path, comand);
 			line = NULL;
