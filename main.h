@@ -1,22 +1,23 @@
 #ifndef _MAIN_H
 #define _MAIN_H
 
-#include <unistd.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 extern char **environ;
 
-char **getCommandArray(char *line, char **command);
-void display_environment_var(void);
-char *pathfinder(char *command);
-void *_malloc(unsigned int size);
 void interruptHandler(int signal);
+void display_environment_var(void);
+void execComand(char *full_path, char *comand);
+char **getCommandArray(char *line, char **command);
+char *pathfinder(char *command);
 int builtin(char *user_input);
-void execComand(char *full_path, char **comand);
+void *_malloc(unsigned int size);
 
 #endif
