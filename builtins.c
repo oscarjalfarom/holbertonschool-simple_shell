@@ -10,8 +10,8 @@ int builtin(char *comand)
 {
 	if (strcmp(comand, "exit") == 0)
 	{
-		exit(EXIT_SUCCESS);
-		free(comand);
+	        free(comand);
+	        exit(EXIT_SUCCESS);
 		return (1);
 	}
 	else if (strcmp(comand, "env") == 0)
