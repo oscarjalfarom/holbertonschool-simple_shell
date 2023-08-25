@@ -15,8 +15,6 @@ int main(void)
 	{
 		if (isatty(STDIN_FILENO))
 			printf(" $ ");
-		fflush(stdin);
-		signal(SIGINT, interruptHandler);
 		if (getline(&line, &buffer_size, stdin) != EOF)
 		{
 			trim(line);
