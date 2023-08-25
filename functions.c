@@ -52,30 +52,23 @@ char *pathfinder(char *command)
  * Return: not return
  */
 
-void execComand(char *full_path, char **comand) {
-    pid_t child_pid;
-    int status = 0;
+void execComand(char *full_path, char **comand)
+{
+	pid_t child_pid;
+	int status = 0;
 
-    if (builtin(comand[0]) == 0) {
-        child_pid = fork();
-        if (child_pid == 0) {
-            if (execve(full_path, comand, environ)) {
-	        perror("Error: ");
-                exit(2);
-            }
-        }
-        if (child_pid > 0) {
-            wait(&status);
-            if (WIFEXITED(status)) {
-                status = WEXITSTATUS(status);
-                if (status != 0) {
-                    exit(status);
-                }
-            }
-        }
-    }
+	if (builtin(comand[0]) == 0)
+	{
+		child_pid = fork();
+		if (child_pid == 0)
+		{
+			if (execve(full_path, comand, environ))
+				perror("Error: "), exit(EXIT_FAILURE);
+		}
+		if (child_pid > 0)
+			wait(&status);
+	}
 }
-
 
 /**
  * display_environment_var - display environment
