@@ -10,6 +10,8 @@ int main(void)
 	char *comand[1024], *line = NULL, *full_path = NULL, *token;
 	size_t buffer_size = 0;
 	int i;
+	pid_t child_pid;
+        int status = 0;
 
 	while (1)
 	{
@@ -32,7 +34,22 @@ int main(void)
 			if (comand[0] == NULL)
 				continue;
 			full_path = pathfinder(comand[0]);
-			execComand(full_path, comand);
+			if (builtin(comand[0]) == 0)
+			{
+			         child_pid = fork();
+				 if (child_pid == 0)
+				 {
+				        if (execve(full_path, comand, environ))
+				        {
+					         perror("execve");    
+						 free(line);
+					         exit(2);
+					  
+					}
+				 }
+				 if (child_pid > 0)
+				        wait(&status), free(line);
+			}
 			line = NULL;
 			free(full_path);
 		}
