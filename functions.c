@@ -60,7 +60,6 @@ void execComand(char *full_path, char **comand) {
         child_pid = fork();
         if (child_pid == 0) {
             if (execve(full_path, comand, environ)) {
-	        free(comand);
 	        perror("Error: ");
                 exit(2);
             }
