@@ -52,23 +52,30 @@ char *pathfinder(char *command)
  * Return: not return
  */
 
-void execComand(char *full_path, char **comand)
-{
-	pid_t child_pid;
-	int status = 0;
+void execComand(char *full_path, char **comand) {
+    pid_t child_pid;
+    int status = 0;
 
-	if (builtin(comand[0]) == 0)
-	{
-		child_pid = fork();
-		if (child_pid == 0)
-		{
-			if (execve(full_path, comand, environ) == -1)
-				perror("Error executing command"), exit(EXIT_FAILURE);
-		}
-		if (child_pid > 0)
-			wait(&status);
-	}
+    if (builtin(comand[0]) == 0) {
+        child_pid = fork();
+        if (child_pid == 0) {
+            if (execve(full_path, comand, environ)) {
+                perror("Error: ");
+                exit(2);
+            }
+        }
+        if (child_pid > 0) {
+            wait(&status);
+            if (WIFEXITED(status)) {
+                status = WEXITSTATUS(status);
+                if (status != 0) {
+                    exit(status);
+                }
+            }
+        }
+    }
 }
+
 
 /**
  * display_environment_var - display environment
@@ -115,32 +122,4 @@ void trim(char *str)
 	}
 	/* Agregar el carácter nulo al final*/
 	str[j] = '\0';
-}
-
-#include <ctype.h>
-
-void removeExtraSpaces(char *str)
-{
-    int i = 0, j = 0;
-    int space_seen = 0;
-
-    while (str[i])
-    {
-        if (!isspace((unsigned char)str[i]))
-        {
-            space_seen = 0;
-            str[j++] = str[i];
-        }
-        else if (!space_seen)
-        {
-            space_seen = 1;
-            str[j++] = ' ';
-        }
-        i++;
-    }
-
-    if (j > 0 && isspace((unsigned char)str[j - 1]))
-        str[j - 1] = '\0';
-    else
-        str[j] = '\0';
 }

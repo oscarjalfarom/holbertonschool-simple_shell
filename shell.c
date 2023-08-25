@@ -19,8 +19,7 @@ int main(void)
 		signal(SIGINT, interruptHandler);
 		if (getline(&line, &buffer_size, stdin) != EOF)
 		{
-		        removeExtraSpaces(line);
-		        trim(line);
+			trim(line);
 			if (*line == '\n' || *line == '\t')
 				continue;
 			token = strtok(line, " \t\n");

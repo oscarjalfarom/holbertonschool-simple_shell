@@ -12,7 +12,7 @@ int builtin(char *comand)
 	{
 		free(comand);
 		exit(EXIT_SUCCESS);
-		return (2);
+		return (1);
 	}
 	else if (strcmp(comand, "env") == 0)
 	{
