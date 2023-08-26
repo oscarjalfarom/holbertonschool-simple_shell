@@ -1,45 +1,46 @@
 #include "main.h"
-
 /**
- * main - head of the program
- * Return: always succes
- */
+* main - simple shell
+*
+* Return: 0 when exiting
+*/
 
 int main(void)
 {
-	char *comand[1024], *line = NULL, *full_path = NULL, *token;
-	size_t buffer_size = 0;
-	int i;
+	ssize_t line_len = 0;
+	size_t arg_line_len = 0;
+	char *line = NULL, *token, *str[32];
+	const char delimiter[] = " \n\t\0";
+	int i = 1, exstat;
 
 	while (1)
 	{
+		line = NULL;
+		i = 1;
 		if (isatty(STDIN_FILENO))
-			printf(" $ ");
-		if (getline(&line, &buffer_size, stdin) != EOF)
-		{
-			trim(line);
-			if (*line == '\n' || *line == '\t')
-			{
-				free(line);
-				continue;
-			}
-			token = strtok(line, " \t\n");
-			for (i = 0; i < 1024 && token != NULL; i++)
-			{
-				comand[i] = token;
-				token = strtok(NULL, " \t\n");
-			}
-			comand[i] = NULL;
-			full_path = pathfinder(comand[0]);
-			execComand(full_path, comand);
-		}
-		else
+			write(1, "($) ", 5);
+		line_len = getline(&line, &arg_line_len, stdin);
+		if (line_len == EOF || (strcmp(line, "exit\n") == 0))
 		{
 			free(line);
-			return (0);
+			exit(0);
+		}
+		token = strtok(line, delimiter);
+		str[0] = token;
+		if (str[0] == NULL)
+			free(line);
+		else if (strcmp(str[0], "env") == 0)
+			printenv(line);
+		else
+		{
+			for (i = 1; token != NULL; i++)
+			{
+				token = strtok(NULL, delimiter);
+				str[i] = token;
+			}
+			exstat = checkdir(str);
+			free(line);
 		}
 	}
-	free(line);
-	free(full_path);
-	return (0);
+	return (exstat);
 }
