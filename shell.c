@@ -19,7 +19,10 @@ int main(void)
 		{
 			trim(line);
 			if (*line == '\n' || *line == '\t')
+			{
+				free(line);
 				continue;
+			}
 			token = strtok(line, " \t\n");
 			for (i = 0; i < 1024 && token != NULL; i++)
 			{
@@ -27,12 +30,8 @@ int main(void)
 				token = strtok(NULL, " \t\n");
 			}
 			comand[i] = NULL;
-			if (comand[0] == NULL)
-				continue;
 			full_path = pathfinder(comand[0]);
 			execComand(full_path, comand);
-			line = NULL;
-			free(full_path);
 		}
 		else
 		{
@@ -41,8 +40,6 @@ int main(void)
 		}
 	}
 	free(line);
-	for (i = 0; comand[i] != NULL; i++)
-		free(comand[i]);
 	free(full_path);
 	return (0);
 }

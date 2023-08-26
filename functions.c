@@ -28,6 +28,7 @@ char *pathfinder(char *command)
 			strcat(file_path, "\0");
 			if (stat(file_path, &buffer) == 0)
 			{
+				free(path_copy);
 				return (file_path);
 			}
 			else
@@ -56,13 +57,13 @@ void execComand(char *full_path, char **comand)
 	pid_t child_pid;
 	int status = 0;
 
-	if (builtin(comand[0]) == 0)
+	if (builtin(comand) == 0)
 	{
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			if (execve(full_path, comand, environ))
-				perror("Error: "), exit(EXIT_FAILURE);
+			if (execve(full_path, comand, environ) == -1)
+				perror("Command not found "), exit(EXIT_FAILURE);
 		}
 		if (child_pid > 0)
 			wait(&status);
