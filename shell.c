@@ -18,7 +18,7 @@ int main(void)
             if (feof(stdin))
             {
                 printf("\n");
-                exit(EXIT_SUCCESS);
+                break;
             }
             else
             {
@@ -30,8 +30,7 @@ int main(void)
         if (input[read - 1] == '\n')
             input[read - 1] = '\0';
 
-        free(input);
     }
-
+    free(input);
     return 0;
 }
