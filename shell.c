@@ -1,45 +1,37 @@
-#include "main.h"
-
-/**
- * main - head of the program
- * Return: always succes
- */
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 int main(void)
 {
-	char *comand[1024], *line = NULL, *full_path = NULL, *token;
-	size_t buffer_size = 0;
-	int i;
+    char *input;
+    size_t len = 0;
+    ssize_t read;
 
-	while (1)
-	{
-		if (isatty(STDIN_FILENO))
-			printf(" $ ");
-		if (getline(&line, &buffer_size, stdin) != EOF)
-		{
-			trim(line);
-			if (*line == '\n' || *line == '\t')
-			{
-				free(line);
-				continue;
-			}
-			token = strtok(line, " \t\n");
-			for (i = 0; i < 1024 && token != NULL; i++)
-			{
-				comand[i] = token;
-				token = strtok(NULL, " \t\n");
-			}
-			comand[i] = NULL;
-			full_path = pathfinder(comand[0]);
-			execComand(full_path, comand);
-		}
-		else
-		{
-			free(line);
-			return (0);
-		}
-	}
-	free(line);
-	free(full_path);
-	return (0);
+    while (1)
+    {
+        printf("($) ");
+        read = getline(&input, &len, stdin);
+        
+        if (read == -1)
+        {
+            if (feof(stdin))
+            {
+                printf("\n");
+                exit(EXIT_SUCCESS);
+            }
+            else
+            {
+                perror("getline");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        if (input[read - 1] == '\n')
+            input[read - 1] = '\0';
+
+        free(input);
+    }
+
+    return 0;
 }
